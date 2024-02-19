@@ -1,5 +1,7 @@
 import { ReactElement } from 'react';
+
 import { Typography } from '@mui/material';
+
 import { People } from '@/types/people';
 
 interface Props {
