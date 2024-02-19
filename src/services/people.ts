@@ -8,6 +8,7 @@ const PEOPLE_RESOURCE = 'people';
 
 export class PeopleService {
   private url = process.env.NEXT_PUBLIC_API_URL;
+  private elementsPerPage = 10;
 
   private getURL(page?: number): string {
     if (!this.url) {
@@ -37,9 +38,9 @@ export class PeopleService {
       });
 
       return {
-        page: 1,
-        perPage: 10,
-        totalPage: 1,
+        page: page,
+        perPage: this.elementsPerPage,
+        totalPage: Math.ceil(response.count/this.elementsPerPage),
         list: response.results.map((x) => ({ name: x.name })),
       };
     } catch (e) {

@@ -1,12 +1,12 @@
+import { ReactElement } from 'react';
 import { Typography } from '@mui/material';
-
 import { People } from '@/types/people';
 
 interface Props {
   peoples: People[];
 }
 
-const PeoplesList = ({ peoples }: Props): JSX.Element => {
+const PeoplesList = ({ peoples }: Props): ReactElement => {
   return (
     <>
       {peoples.map((x) => (
