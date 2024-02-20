@@ -27,3 +27,7 @@ export interface People {
   name: string;
   id: number;
 }
+export interface Pilot {
+  name: string;
+  url: string;
+}

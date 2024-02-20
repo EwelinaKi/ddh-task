@@ -52,15 +52,10 @@ export const PersonCard = ({ data }: Props): ReactElement => {
         <Typography color='text.secondary' variant="h2"  sx={{ fontSize: 24 }} gutterBottom>
           {data.name}
         </Typography>
-
-        {personDetails.map( ({attribute, attributeName}) => {
-          return (
-            <Typography key={attribute} color='text.secondary'>
-              {attributeName}: {data[attribute] || 'dupa'}
-            </Typography>
-          )
-        })}
-
+        {personDetails.map( ({attribute, attributeName}) =>
+            // @ts-ignore
+            <Typography key={attribute} color='text.secondary'>{attributeName}: {data[attribute]}</Typography>
+        )}
       </CardContent>
       <CardActions>
         <Button variant='outlined' size='large' onClick={() => router.push('/')}>Back</Button>

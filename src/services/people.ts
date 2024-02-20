@@ -1,6 +1,6 @@
 import { APIList } from '@/types/api';
 import { List } from '@/types/list';
-import { People, PeopleAPI } from '@/types/people';
+import { People, PeopleAPI, Pilot } from '@/types/people';
 
 import { fetcher } from '@/utils/fetcher';
 
@@ -31,7 +31,7 @@ export class PeopleService {
     const apiURL = this.getApiUrl();
 
     if (query) {
-      apiURL.searchParams.append('serch', query);
+      apiURL.searchParams.append('search', query);
     }
 
     return apiURL.href;
@@ -57,7 +57,7 @@ export class PeopleService {
     try {
       const response = await fetcher<APIList<PeopleAPI>>(url);
 
-      const requiredFields: Partial<keyof People>[] = ['name'];
+      const requiredFields: Partial<keyof Omit<People, 'id'>>[] = ['name'];
 
       if (!response.results) throw new Error('No data');
 
@@ -90,6 +90,23 @@ export class PeopleService {
       }
 
       return response;
+
+    } catch (e) {
+      throw new Error(`Error while fetching ${e}`);
+    }
+  }
+
+  async searchPilot(name: string): Promise<Pilot[]> {
+    const url = this.getSearchURL(name);
+
+    try {
+      const response = await fetcher<APIList<PeopleAPI>>(url);
+
+      if (!response || !response.results) {
+        throw new Error('No data');
+      }
+
+      return response.results.map( el => ({name: el.name, url: el.url}));
 
     } catch (e) {
       throw new Error(`Error while fetching ${e}`);

@@ -21,3 +21,8 @@ export interface StarshipAPI {
   created: Date;
   edited: Date;
 }
+
+export enum StarshipClassEnum {
+  starfighter = 'Starfighter',
+  battlestation = 'Deep Space Mobile Battlestation'
+}
