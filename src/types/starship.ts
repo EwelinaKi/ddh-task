@@ -1,5 +1,5 @@
 import { FilmAPI } from './film';
-import { PeopleAPI } from './people';
+import { PeopleAPI, Pilot } from './people';
 
 export interface StarshipAPI {
   MGLT: string;
@@ -25,4 +25,14 @@ export interface StarshipAPI {
 export enum StarshipClassEnum {
   starfighter = 'Starfighter',
   battlestation = 'Deep Space Mobile Battlestation'
+}
+
+export interface Starship {
+  name: string,
+  pilot: Pilot,
+  model: string,
+  starship_class: StarshipClassEnum,
+  cost_in_credits: number,
+  length: string,
+  max_atmosphering_speed: string,
 }

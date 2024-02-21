@@ -14,26 +14,17 @@ import debounce from '@mui/utils/debounce';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 
-import { Pilot } from '@/types/people';
-import { StarshipClassEnum } from '@/types/starship';
+import { Starship, StarshipClassEnum } from '@/types/starship';
 
 import useSearchPilot from '@/hooks/useSearchPilot';
-
-interface IFormInput {
-  name: string,
-  pilot: Pilot,
-  model: string,
-  starship_class: StarshipClassEnum,
-  cost_in_credits: number,
-  length: string,
-  max_atmosphering_speed: string,
-}
+import useStarship from '@/hooks/useStarship';
 
 export const StarshipForm = () => {
-  const { register, getValues, handleSubmit, reset, setValue, clearErrors } = useForm<IFormInput>();
-  const [submittedData, setSubmittedData] = useState<IFormInput | null>(null);
+  const { register, handleSubmit, reset, setValue } = useForm<Starship>();
+  const [submittedData, setSubmittedData] = useState<Starship | null>(null);
   const [searchPilotName, setSearchPilotName] = useState('');
-  const { pilots, status } = useSearchPilot(searchPilotName);
+  const { pilots  } = useSearchPilot(searchPilotName);
+  const { status: postStatus, postStarship } = useStarship();
 
   const onPilotNameChange = (name: string) => {
     setSearchPilotName(name);
@@ -46,14 +37,15 @@ export const StarshipForm = () => {
     setSubmittedData(null);
   };
 
-  const onSubmit: SubmitHandler<IFormInput> = (data, event) => {
+  const onSubmit: SubmitHandler<Starship> = (data: Starship) => {
     setSubmittedData(data);
+    postStarship(data);
   };
 
   const onSelectedPilotName = (selectedName: string) => {
     const filteredPilot = pilots?.find(pilot => pilot.name === selectedName);
     filteredPilot && setValue('pilot', filteredPilot);
-  }
+  };
 
   return (
     <>
@@ -97,7 +89,6 @@ export const StarshipForm = () => {
             {...register('starship_class')}
             label='Starship class'
             margin='dense'
-            defaultValue=''
             select
             fullWidth
             required
@@ -113,7 +104,6 @@ export const StarshipForm = () => {
             label={'Cost in credits (min. 1000)'}
             margin='dense'
             type='number'
-            defaultValue='1000'
             fullWidth
             required
           />
@@ -145,7 +135,7 @@ export const StarshipForm = () => {
         </Stack>
       </form>
       {
-        submittedData &&
+        submittedData && postStatus === 'success' &&
         <>
           <Typography>
             Submitted data: {JSON.stringify(submittedData)}
